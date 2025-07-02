@@ -1,47 +1,39 @@
 services:
-  app: 
-    image: fastapi_analytics_app
+  app:
+    image: analytics-api:v1
     build:
       context: .
       dockerfile: Dockerfile.web
-    command: uvicorn main:app --host 0.0.0.0 --port 8002 --reload
     # environment:
     #   - PORT=8002
-    #   - DATABASE_URL=postgresql+pyscopg2://fastapi_user:fastapi_password@db:5432/fastapi_db
+    #   - DATABASE_URL=postgresql+psycopg://time-user:time-pw@db_service:5432/timescaledb
     env_file:
-      - .env
+      - .env.compose
     ports:
       - "8002:8002"
-    restart: unless-stopped
+    command: uvicorn main:app --host 0.0.0.0 --port 8002 --reload
     volumes:
       - ./src:/code:rw
-    develop: 
+    develop:
       watch:
         - action: rebuild
           path: Dockerfile.web
-        - action : rebuild
+        - action: rebuild
           path: requirements.txt
         - action: rebuild
-          path: compose.yml
-    depends_on:
-      - db_service
-  # https://qiita.com/Ryo-0131/items/25d75106b2f5e082be37
-  # postgresql+pyscopg2://fastapi_user:fastapi_password@db:5432/fastapi_db
+          path: compose.yaml
   db_service:
     image: timescale/timescaledb:latest-pg17
-    restart: always
     environment:
-
       - POSTGRES_USER=time-user
-      - POSTGRES_PASSWORD=time-user
+      - POSTGRES_PASSWORD=time-pw
       - POSTGRES_DB=timescaledb
-#      - TS_TUNE_MEMORY=8GB # free -m | grep 'Mem' | awk '{print $2}'
     ports:
       - "5432:5432"
     # expose:
-    #   - "5432"
+    #   - 5432
     volumes:
       - timescaledb_data:/var/lib/postgresql/data
+
 volumes:
   timescaledb_data:
-
