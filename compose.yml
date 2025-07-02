@@ -8,8 +8,8 @@ services:
     # environment:
     #   - PORT=8002
     #   - DATABASE_URL=postgresql+pyscopg2://fastapi_user:fastapi_password@db:5432/fastapi_db
-    environment:
-      - DATABASE_URL=postgresql://time-user:time-user@db_service:5432/timescaledb
+    env_file:
+      - .env.compose
     ports:
       - "8002:8002"
     restart: unless-stopped
