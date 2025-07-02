@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.web
-    command: bash -c 'while !</dev/tcp/db_service/5432; do sleep 1; done; uvicorn main:app --host 0.0.0.0 --port 8002 --reload'
+    command: uvicorn main:app --host 0.0.0.0 --port 8002 --reload
     # environment:
     #   - PORT=8002
     #   - DATABASE_URL=postgresql+pyscopg2://fastapi_user:fastapi_password@db:5432/fastapi_db
