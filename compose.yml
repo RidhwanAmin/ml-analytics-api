@@ -9,7 +9,7 @@ services:
     #   - PORT=8002
     #   - DATABASE_URL=postgresql+pyscopg2://fastapi_user:fastapi_password@db:5432/fastapi_db
     env_file:
-      - .env.compose
+      - .env
     ports:
       - "8002:8002"
     restart: unless-stopped
